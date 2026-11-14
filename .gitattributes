@@ -3,6 +3,8 @@
 *.gradle text eol=lf
 *.properties text eol=lf
 *.md text eol=lf
+# Preserve upstream notices and recovered resources byte for byte.
+src/main/resources/** -text -whitespace
 gradlew text eol=lf
 gradlew.bat text eol=crlf
 *.png binary
