@@ -1,0 +1,49 @@
+Corresponding sources for org.bytedeco:ffmpeg:7.1.1-1.5.12
+Standard LGPL variants; do not substitute the separate -gpl classifiers.
+
+Upstream FFmpeg, exact release:
+https://ffmpeg.org/releases/ffmpeg-7.1.1.tar.bz2
+
+Exact JavaCPP Presets release, with JNI wrapper sources, build configuration,
+ffmpeg.patch, ffmpeg-vulkan.patch, platform patches and the source download list:
+https://github.com/bytedeco/javacpp-presets/archive/refs/tags/1.5.12.tar.gz
+https://github.com/bytedeco/javacpp-presets/blob/1.5.12/ffmpeg/cppbuild.sh
+https://github.com/bytedeco/javacpp-presets/tree/1.5.12/ffmpeg
+
+JavaCPP runtime and generator 1.5.12:
+https://github.com/bytedeco/javacpp/archive/refs/tags/1.5.12.tar.gz
+
+JavaCV 1.5.12:
+https://github.com/bytedeco/javacv/archive/refs/tags/1.5.12.tar.gz
+
+External sources pinned by ffmpeg/cppbuild.sh (not all are linked on every OS):
+zlib 1.3.1: https://zlib.net/fossils/zlib-1.3.1.tar.gz
+LAME 3.100: https://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz
+Speex 1.2.1: https://ftp.osuosl.org/pub/xiph/releases/speex/speex-1.2.1.tar.gz
+Opus 1.3.1: https://archive.mozilla.org/pub/opus/opus-1.3.1.tar.gz
+OpenCORE AMR 0.1.6: https://sourceforge.net/projects/opencore-amr/files/opencore-amr/opencore-amr-0.1.6.tar.gz/download
+VisualOn AMR-WB 0.1.3: https://sourceforge.net/projects/opencore-amr/files/vo-amrwbenc/vo-amrwbenc-0.1.3.tar.gz/download
+OpenSSL 3.4.1: https://github.com/openssl/openssl/releases/download/openssl-3.4.1/openssl-3.4.1.tar.gz
+OpenH264 2.6.0: https://github.com/cisco/openh264/archive/v2.6.0.tar.gz
+libvpx 1.15.1: https://github.com/webmproject/libvpx/archive/v1.15.1.tar.gz
+ALSA 1.2.14: https://ftp.osuosl.org/pub/blfs/conglomeration/alsa-lib/alsa-lib-1.2.14.tar.bz2
+FreeType 2.13.3: https://ftp.osuosl.org/pub/blfs/conglomeration/freetype/freetype-2.13.3.tar.xz
+mfx_dispatch 1.35.1: https://github.com/lu-zero/mfx_dispatch/archive/1.35.1.tar.gz
+nv-codec-headers 13.0.19.0: https://github.com/FFmpeg/nv-codec-headers/archive/n13.0.19.0.tar.gz
+libxml2 2.9.12: https://download.gnome.org/sources/libxml2/2.9/libxml2-2.9.12.tar.xz
+SRT 1.5.4: https://github.com/Haivision/srt/archive/refs/tags/v1.5.4.tar.gz
+libwebp 1.5.0: https://github.com/webmproject/libwebp/archive/refs/tags/v1.5.0.tar.gz
+libaom 3.9.1: https://storage.googleapis.com/aom-releases/libaom-3.9.1.tar.gz
+SVT-AV1 2.3.0: https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v2.3.0/SVT-AV1-v2.3.0.tar.gz
+zimg 3.0.5: https://github.com/sekrit-twc/zimg/archive/refs/tags/release-3.0.5.tar.gz
+
+Build tools are described in the exact JavaCPP Presets source above. Windows
+FFmpeg runtime configuration reports static libgcc/libstdc++; their licensing
+uses the GCC Runtime Library Exception to GPLv3:
+https://gcc.gnu.org/onlinedocs/libstdc++/manual/license.html
+https://gcc.gnu.org/git/?p=gcc.git;a=blob_plain;f=COPYING.RUNTIME;hb=releases/gcc-14
+
+The upstream projects retain all copyrights. No changes to third-party native
+binaries are made by WORDcraft. Keep source access and license notices available
+when redistributing these binaries. Preserve this exact-version list rather than
+replacing it with links to moving master branches.

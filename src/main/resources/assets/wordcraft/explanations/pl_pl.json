@@ -1,0 +1,376 @@
+{
+  "schemaVersion": 1,
+  "verifiedOn": "2026-10-22",
+  "entries": [
+    {
+      "id": "6225",
+      "fingerprint": "03ea5ada5be9fd6d5dc093abcd1c4a7e9b562d3f7e714f1131a9999106aae9fc",
+      "reason": "Pod koniec filmu inny pojazd jedzie przed tobą. Światła drogowe mogą oślepiać jego kierowcę przez lusterka, dlatego trzeba przełączyć je na mijania.",
+      "wrongAnswers": [
+        "",
+        "Możliwość oślepienia kierowcy jadącego przed tobą wyklucza dalsze używanie świateł drogowych."
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 51 ust. 3 pkt 2",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=61"
+        },
+        {
+          "label": "Policja — używanie świateł drogowych",
+          "url": "https://zachodniopomorska.policja.gov.pl/sz/aktualnosci/ruch-drogowy/warto-wiedziec/54663,Warto-wiedziec-swiatla-zewnetrzne-pojazdu.html"
+        }
+      ]
+    },
+    {
+      "id": "6388",
+      "fingerprint": "26041faf4b7e5f0eb71919848ec28b45194f02980b403c07dd5c208226b53951",
+      "reason": "Zasadą jest korzystanie z pasów przez kierującego i pasażerów na wszystkich wyposażonych w nie siedzeniach. Tylna kanapa i jazda w mieście nie zwalniają z tego obowiązku. Ustawa przewiduje osobne wyjątki, np. określone przeciwwskazanie lekarskie.",
+      "wrongAnswers": [
+        "Odpowiedź pomija pasażerów z tyłu, których także obejmuje obowiązek korzystania z pasów.",
+        "Obowiązek na tylnym siedzeniu nie zależy od tego, czy jedziesz w obszarze zabudowanym.",
+        ""
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 39 ust. 1–2",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=51"
+        },
+        {
+          "label": "Policja — pasy bezpieczeństwa",
+          "url": "https://torun.policja.gov.pl/kb3/ruch-drogowy/pasy-bezpieczenstwa-ora/107837,Pasy-Bezpieczenstwa-oraz-prawidlowe-przewozenie-dzieci-w-pojezdzie.html"
+        }
+      ]
+    },
+    {
+      "id": "10048",
+      "fingerprint": "397b3b403467cfa4df819ed746b411f9b202dc3034b7db760c72097c9109a678",
+      "reason": "Trójkąt ostrzegawczy uprzedza nadjeżdżających kierowców o pojeździe unieruchomionym wskutek awarii lub wypadku, dając czas na bezpieczną reakcję.",
+      "wrongAnswers": [
+        "Ładunek na dachu nie oznacza postoju awaryjnego, do którego służy ten trójkąt.",
+        "",
+        "Trójkąt służy tu ostrzeganiu o unieruchomieniu pojazdu, a nie zastępowaniu świateł samochodu w ruchu."
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 50 ust. 1–2",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=59"
+        },
+        {
+          "label": "Policja — rola trójkąta ostrzegawczego",
+          "url": "https://lodzka.policja.gov.pl/el1/aktualnosci/110427,Trojkat-ostrzegawczy-jak-i-gdzie-go-ustawic.html"
+        }
+      ]
+    },
+    {
+      "id": "10878",
+      "fingerprint": "f51e51075f149707ab9f41cf5963e5fbd06a5c3ee586c1d5780910bd11985392",
+      "reason": "To wyjątek dotyczący tylnego siedzenia: dziecko musi mieć co najmniej 135 cm, używać pasów, a jego masa i wzrost muszą uniemożliwiać zapewnienie odpowiedniego fotelika lub urządzenia. Sam wzrost 135 cm nie wystarcza.",
+      "wrongAnswers": [
+        "",
+        "125 cm nie spełnia progu 135 cm określonego dla tego wyjątku.",
+        "Ograniczenie prędkości nie zastępuje wymaganego zabezpieczenia dziecka."
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 39 ust. 3b",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=53"
+        },
+        {
+          "label": "Policja — wyjątek 135 cm na tylnym siedzeniu",
+          "url": "https://torun.policja.gov.pl/kb3/ruch-drogowy/pasy-bezpieczenstwa-ora/107837,Pasy-Bezpieczenstwa-oraz-prawidlowe-przewozenie-dzieci-w-pojezdzie.html"
+        }
+      ]
+    },
+    {
+      "id": "13051",
+      "fingerprint": "5d944dd21441ecce6a6628dc8bb73bbc3860e22346755aa6abeeae7791e934d2",
+      "reason": "Znak D-7 oznacza drogę ekspresową. Dla samochodu osobowego na jej jednojezdniowym odcinku limit wynosi 100 km/h. Nadal obowiązują niższe ograniczenia ze znaków i prędkość bezpieczna dla warunków.",
+      "wrongAnswers": [
+        "140 km/h jest limitem dla samochodu osobowego na autostradzie, a nie na ekspresowej drodze jednojezdniowej.",
+        "",
+        "120 km/h dotyczy ekspresowej drogi dwujezdniowej; pytanie wskazuje jedną jezdnię."
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 20 ust. 3 pkt 1 lit. a–c; art. 19 ust. 1",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=32"
+        },
+        {
+          "label": "Znaki i sygnały drogowe — § 48 ust. 1 (D-7)",
+          "url": "https://eli.gov.pl/api/acts/DU/2019/2310/text.html"
+        }
+      ]
+    },
+    {
+      "id": "13618",
+      "fingerprint": "3cb6330bb33d3c8cc16547fdb25c6ca10b39088245ce4a6f4ac76d47e172852a",
+      "reason": "Przed wjazdem na tory trzeba upewnić się, że nie nadjeżdża pojazd szynowy. Podniesione zapory nie zastępują tej kontroli ani obowiązku stosowania się do sygnalizacji.",
+      "wrongAnswers": [
+        "",
+        "Podniesienie zapór nie znosi ustawowego obowiązku upewnienia się, czy nie zbliża się pociąg."
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 28 ust. 1",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=40"
+        }
+      ]
+    },
+    {
+      "id": "3625",
+      "fingerprint": "8b77ffba9400be148928f09013aa184cd017d14d5479789039d277368d65ca4c",
+      "reason": "Przy wymijaniu trzeba zachować odstęp bezpieczny w danych warunkach. Jeśli miejsca brakuje, należy zjechać na prawo i odpowiednio zwolnić lub się zatrzymać.",
+      "wrongAnswers": [
+        "Dla wymijania samochodu ustawa nie wyznacza ogólnego minimum 1,5 m; nakazuje odstęp bezpieczny.",
+        "",
+        "Ten sam odstęp nie będzie bezpieczny przy każdej szerokości jezdni i w każdych warunkach."
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 23 ust. 1 pkt 1",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=35"
+        }
+      ]
+    },
+    {
+      "id": "3626",
+      "fingerprint": "012d87265f11d795f945036bda342ba9298bb0ddee5061028ab40aa702b82a1a",
+      "reason": "Podczas wyprzedzania roweru obowiązuje zarówno bezpieczny odstęp, jak i minimum 1 m. W trudnych warunkach może być potrzebny większy odstęp.",
+      "wrongAnswers": [
+        "Przy wymijaniu samochodu wymagany jest odstęp bezpieczny; szczególne minimum 1 m z tego pytania dotyczy wyprzedzania roweru.",
+        "",
+        "Przy omijaniu dowolnego pojazdu ustawa wymaga odstępu bezpiecznego, bez ogólnego minimum 1 m."
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 24 ust. 2; art. 23 ust. 1",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=36"
+        },
+        {
+          "label": "Ministerstwo Infrastruktury — minimum 1 m i bezpieczeństwo wyprzedzania",
+          "url": "https://www.gov.pl/attachment/ebe94c9a-1e33-4c30-8091-1051dedb4cba"
+        }
+      ]
+    },
+    {
+      "id": "3627",
+      "fingerprint": "63f0713bce5f931ecd420b83e8573be4aa2d80b009b68e2292a95c8eab88b5bd",
+      "reason": "Omijając nieruchomą przeszkodę, dobierasz odstęp tak, aby przejechać bezpiecznie, a w razie potrzeby zwalniasz. Warunki manewru wyznaczają potrzebną przestrzeń.",
+      "wrongAnswers": [
+        "Ustawa nie ustanawia ogólnego minimum 0,8 m dla omijania przeszkody; wymaga odstępu bezpiecznego.",
+        "Stały odstęp nie uwzględnia szerokości jezdni ani zmieniających się warunków.",
+        ""
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 23 ust. 1 pkt 2",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=35"
+        }
+      ]
+    },
+    {
+      "id": "3628",
+      "fingerprint": "9913dd9db60e848a18f6755886cd46685a121987742feeca1b7eaf203dfbd09f",
+      "reason": "Wyprzedzając samochód osobowy, zachowujesz odstęp bezpieczny w danych warunkach. Nie ma dla tego przypadku jednego ogólnego ustawowego minimum w metrach.",
+      "wrongAnswers": [
+        "",
+        "Dla wyprzedzania samochodu osobowego nie ustalono ogólnego minimum 1,5 m. Odstęp ma zapewniać bezpieczeństwo.",
+        "Ograniczenie odstępu do mniej niż 0,5 m nie gwarantuje bezpiecznego wyprzedzania."
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 24 ust. 2",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=36"
+        }
+      ]
+    },
+    {
+      "id": "3629",
+      "fingerprint": "f4056f1d7898af3ee60186f4c019a685564c129e4318ea26767bc0c9c34b3676",
+      "reason": "Motocykl należy do pojazdów, przy których wyprzedzaniu wymagany jest odstęp co najmniej 1 m. To dolna granica; warunki mogą wymagać większej przestrzeni.",
+      "wrongAnswers": [
+        "Maksymalnie 0,5 m jest sprzeczne z wymaganym minimum 1 m.",
+        "Przepis ustanawia minimum 1 m, nie górną granicę odstępu.",
+        ""
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 24 ust. 2",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=36"
+        },
+        {
+          "label": "Ministerstwo Infrastruktury — minimalny odstęp przy wyprzedzaniu",
+          "url": "https://www.gov.pl/attachment/ebe94c9a-1e33-4c30-8091-1051dedb4cba"
+        }
+      ]
+    },
+    {
+      "id": "3630",
+      "fingerprint": "9b2f5a60e9dbf8d6c728755f191f2b5fa48dd7281cd2765b85e637299f4ea138",
+      "reason": "Wyprzedzając kolumnę pieszych, zachowujesz bezpieczny odstęp nie mniejszy niż 1 m. Jeden metr to minimum, a nie zapewnienie bezpieczeństwa w każdych warunkach.",
+      "wrongAnswers": [
+        "0,6 m jest mniejsze niż ustawowe minimum 1 m.",
+        "0,8 m jest mniejsze niż ustawowe minimum 1 m.",
+        ""
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 24 ust. 2",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=36"
+        },
+        {
+          "label": "Ministerstwo Infrastruktury — minimalny odstęp przy wyprzedzaniu",
+          "url": "https://www.gov.pl/attachment/ebe94c9a-1e33-4c30-8091-1051dedb4cba"
+        }
+      ]
+    },
+    {
+      "id": "6361",
+      "fingerprint": "f07cad3c649013237a1a4f5110e94c1649260bea59ce5e41cafd3846686ea347",
+      "reason": "Zbliżając się do pojazdu nadjeżdżającego z przeciwka, trzeba wyłączyć światła drogowe i używać mijania, aby nie oślepiać jego kierowcy.",
+      "wrongAnswers": [
+        "",
+        "Sam początek deszczu nie jest wskazanym w tym pytaniu warunkiem przełączenia świateł drogowych. Decydują m.in. zasady nieoślepiania.",
+        "Sama granica obszaru zabudowanego nie jest tym warunkiem. Świateł drogowych można używać wyłącznie na nieoświetlonych drogach i bez oślepiania."
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 51 ust. 3 pkt 1",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=61"
+        },
+        {
+          "label": "Policja — używanie świateł drogowych",
+          "url": "https://zachodniopomorska.policja.gov.pl/sz/aktualnosci/ruch-drogowy/warto-wiedziec/54663,Warto-wiedziec-swiatla-zewnetrzne-pojazdu.html"
+        }
+      ]
+    },
+    {
+      "id": "6362",
+      "fingerprint": "63322e5a014d246612e666b49c3ed4d727f3499bd96409b7e3e75bd70347125b",
+      "reason": "Gdy światła drogowe mogą oślepić kierowcę pojazdu przed tobą, trzeba przełączyć je na mijania. Kierowca może zostać oślepiony także światłem odbitym w lusterkach.",
+      "wrongAnswers": [
+        "Sam widok pojazdu, nawet bardzo odległego, nie jest kryterium tego przepisu; decyduje możliwość oślepienia.",
+        "",
+        "Przepis wymienia kierowców i pieszych idących w kolumnie. Sam widok pojedynczego pieszego nie ustanawia wskazanego tu bezwarunkowego obowiązku."
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 51 ust. 3",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=61"
+        },
+        {
+          "label": "Policja — używanie świateł drogowych",
+          "url": "https://zachodniopomorska.policja.gov.pl/sz/aktualnosci/ruch-drogowy/warto-wiedziec/54663,Warto-wiedziec-swiatla-zewnetrzne-pojazdu.html"
+        }
+      ]
+    },
+    {
+      "id": "10806",
+      "fingerprint": "fc2438ad99fcd22b85e209a3db509bf72ce782a892b400a7ce59341729c47283",
+      "reason": "Aktywna przednia poduszka pasażera może uderzyć w fotelik ustawiony tyłem. Dlatego takie ustawienie na przednim siedzeniu jest dozwolone tylko przy nieaktywnej poduszce.",
+      "wrongAnswers": [
+        "Aktywna poduszka wyklucza takie ustawienie fotelika, więc nie jest to dozwolone bez ograniczeń.",
+        "Zakaz dotyczy aktywnej poduszki. Jej wyłączenie pozwala na ustawienie tyłem, z zachowaniem pozostałych zasad przewozu.",
+        ""
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 45 ust. 2 pkt 4",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=56"
+        }
+      ]
+    },
+    {
+      "id": "10840",
+      "fingerprint": "10bcbdc499a6c77b43594bb736f7f9f9f7e6716431ab122fce2f5f3a39f6134c",
+      "reason": "Na przednim siedzeniu dziecko poniżej 150 cm musi być w odpowiednim foteliku lub innym urządzeniu przytrzymującym. Fotelika ustawionego tyłem nie wolno używać przy aktywnej przedniej poduszce pasażera.",
+      "wrongAnswers": [
+        "Kolana dorosłego nie zastępują wymaganego urządzenia przytrzymującego.",
+        "",
+        "Aktywna przednia poduszka pasażera wyklucza ustawienie fotelika tyłem."
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 39 ust. 3; art. 45 ust. 2 pkt 4 i 6",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=56"
+        }
+      ]
+    },
+    {
+      "id": "10871",
+      "fingerprint": "ad67e290801aab5f81e0a2f2bfdd4f277a8b88eb773736392f25b72d0d0c51ee",
+      "reason": "Bezpieczne działanie fotelika wymaga montażu zgodnego z instrukcją producenta danego urządzenia. Wygoda dziecka lub montującego nie może zastępować tych zaleceń.",
+      "wrongAnswers": [
+        "Wygoda dziecka nie określa prawidłowego mocowania fotelika; decyduje instrukcja producenta.",
+        "Wygoda montującego nie zastępuje instrukcji bezpiecznego montażu.",
+        ""
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 39 ust. 3a",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=52"
+        }
+      ]
+    },
+    {
+      "id": "10880",
+      "fingerprint": "8c1d507bf58f6bf6702e027170a3f1c5377cf3e559d40198301d82fcf39d182b",
+      "reason": "Ten wyjątek wymaga jednocześnie tylnego siedzenia, co najmniej 135 cm wzrostu, zapiętych pasów i braku możliwości zapewnienia odpowiedniego urządzenia ze względu na masę i wzrost dziecka.",
+      "wrongAnswers": [
+        "125 cm jest poniżej progu 135 cm przewidzianego w tym wyjątku.",
+        "Prędkość 40 km/h nie zastępuje warunków dotyczących wzrostu i zabezpieczenia dziecka.",
+        ""
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 39 ust. 3b",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=53"
+        },
+        {
+          "label": "Policja — wyjątek 135 cm na tylnym siedzeniu",
+          "url": "https://torun.policja.gov.pl/kb3/ruch-drogowy/pasy-bezpieczenstwa-ora/107837,Pasy-Bezpieczenstwa-oraz-prawidlowe-przewozenie-dzieci-w-pojezdzie.html"
+        }
+      ]
+    },
+    {
+      "id": "10882",
+      "fingerprint": "4a291d2726845d7c708c9b16b3ace45e11526a827692a7d29fd167479fbaab9b",
+      "reason": "Wyjątek pozwala przewieźć z tyłu trzecie dziecko mające co najmniej 3 lata w pasach, gdy dwoje dzieci jest już w urządzeniach przytrzymujących i nie da się zamontować trzeciego urządzenia.",
+      "wrongAnswers": [
+        "",
+        "Siedzenie na kolanach dorosłego nie spełnia wymogu przytrzymania dziecka pasami bezpieczeństwa.",
+        "Blokada drzwi nie zabezpiecza dziecka w sposób wymagany przez ten wyjątek."
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 39 ust. 3c",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=53"
+        },
+        {
+          "label": "Policja — przewóz trzeciego dziecka na tylnym siedzeniu",
+          "url": "https://torun.policja.gov.pl/kb3/ruch-drogowy/pasy-bezpieczenstwa-ora/107837,Pasy-Bezpieczenstwa-oraz-prawidlowe-przewozenie-dzieci-w-pojezdzie.html"
+        }
+      ]
+    },
+    {
+      "id": "10992",
+      "fingerprint": "73ec3a38d3efb1e6ef83309607f3a499b7e30c5ba07da889494c4c63ead95612",
+      "reason": "Wyjątek dotyczy trzeciego dziecka w wieku co najmniej 3 lat na tylnym siedzeniu. Dwoje pozostałych musi być w urządzeniach przytrzymujących, trzecie zapięte pasami, a montaż trzeciego urządzenia musi być niemożliwy.",
+      "wrongAnswers": [
+        "",
+        "Próg 100 cm nie jest warunkiem tego wyjątku; decydują łącznie wiek, pasy, zajęcie miejsc przez dwoje dzieci i niemożność montażu trzeciego urządzenia.",
+        "Nie trzeba ukończyć 15 lat. W tym wyjątku minimalny wiek to 3 lata, przy spełnieniu pozostałych warunków."
+      ],
+      "sources": [
+        {
+          "label": "Prawo o ruchu drogowym — art. 39 ust. 3c",
+          "url": "https://eli.gov.pl/api/acts/DU/1997/602/text/U/D19970602Lj.pdf#page=53"
+        },
+        {
+          "label": "Policja — przewóz trzeciego dziecka na tylnym siedzeniu",
+          "url": "https://torun.policja.gov.pl/kb3/ruch-drogowy/pasy-bezpieczenstwa-ora/107837,Pasy-Bezpieczenstwa-oraz-prawidlowe-przewozenie-dzieci-w-pojezdzie.html"
+        }
+      ]
+    }
+  ]
+}

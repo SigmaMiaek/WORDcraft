@@ -1,0 +1,166 @@
+import java.util.zip.ZipInputStream
+import java.util.zip.ZipOutputStream
+import java.util.zip.ZipEntry
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+import groovy.json.JsonSlurper
+
+plugins {
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
+}
+
+repositories { mavenCentral() }
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+
+    ['javacv:1.5.12', 'javacpp:1.5.12', 'ffmpeg:7.1.1-1.5.12'].each { artifact ->
+        implementation("org.bytedeco:${artifact}") { transitive = false }
+        include("org.bytedeco:${artifact}") { transitive = false }
+    }
+    ['linux-x86_64', 'windows-x86_64', 'macosx-x86_64', 'macosx-arm64'].each { platform ->
+        ['javacpp:1.5.12', 'ffmpeg:7.1.1-1.5.12'].each { artifact ->
+            runtimeOnly("org.bytedeco:${artifact}:${platform}") { transitive = false }
+            include("org.bytedeco:${artifact}:${platform}") { transitive = false }
+        }
+    }
+    testImplementation platform('org.junit:junit-bom:5.14.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+loom { clientOnlyMinecraftJar() }
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') { expand 'version': project.version }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+    withSourcesJar()
+}
+tasks.withType(JavaCompile).configureEach {
+    options.release = 25
+    options.encoding = 'UTF-8'
+    options.compilerArgs += '-Xlint:unchecked'
+}
+
+// JNI libraries are required for in-process playback. The FFmpeg/FFprobe
+// command-line programs are unused, so omit them from every platform bundle.
+def cleanArchive
+cleanArchive = { byte[] bytes ->
+    def result = new ByteArrayOutputStream()
+    new ZipOutputStream(result).withCloseable { output ->
+        output.setLevel(9)
+        new ZipInputStream(new ByteArrayInputStream(bytes)).withCloseable { input ->
+            ZipEntry entry
+            while ((entry = input.nextEntry) != null) {
+                def name = entry.name
+                def lower = name.toLowerCase(Locale.ROOT)
+                def basename = lower.tokenize('/').last()
+                if (['.exe', '.bat', '.cmd', '.com', '.ps1', '.sh'].any { lower.endsWith(it) }
+                        || basename in ['ffmpeg', 'ffprobe']) continue
+                def content = input.readAllBytes()
+                if (lower.endsWith('.jar')) content = cleanArchive(content)
+                def replacement = new ZipEntry(name)
+                replacement.setTime(0L)
+                output.putNextEntry(replacement)
+                output.write(content)
+                output.closeEntry()
+            }
+        }
+    }
+    result.toByteArray()
+}
+
+jar {
+    from('LICENSE')
+    from('CHANGELOG.md')
+    inputs.file('build.gradle')
+    doLast {
+        def archive = archiveFile.get().asFile.toPath()
+        def temporary = archive.resolveSibling(archive.fileName.toString() + '.tmp')
+        Files.write(temporary, cleanArchive(Files.readAllBytes(archive)))
+        Files.move(temporary, archive, StandardCopyOption.REPLACE_EXISTING)
+    }
+}
+
+tasks.named('sourcesJar') { from('LICENSE') }
+
+tasks.register('verifyDistribution') {
+    group = 'verification'
+    description = 'Check the installable JAR, all native platforms and absence of unused CLI programs.'
+    dependsOn jar
+    inputs.file(tasks.jar.archiveFile)
+    doLast {
+        def inspect
+        inspect = { byte[] bytes, String prefix ->
+            def entries = [:]
+            new ZipInputStream(new ByteArrayInputStream(bytes)).withCloseable { input ->
+                ZipEntry entry
+                while ((entry = input.nextEntry) != null) {
+                    def lower = entry.name.toLowerCase(Locale.ROOT)
+                    if (['.exe', '.bat', '.cmd', '.com', '.ps1', '.sh'].any { lower.endsWith(it) }
+                            || lower.tokenize('/').last() in ['ffmpeg', 'ffprobe']) {
+                        throw new GradleException("Unexpected CLI program: ${prefix}${entry.name}")
+                    }
+                    if (entries.containsKey(entry.name)) throw new GradleException("Duplicate ZIP member: ${prefix}${entry.name}")
+                    byte[] content = input.readAllBytes()
+                    entries[entry.name] = content
+                    if (lower.endsWith('.jar')) inspect(content, prefix + entry.name + '!/')
+                }
+            }
+            entries
+        }
+        def entries = inspect(Files.readAllBytes(tasks.jar.archiveFile.get().asFile.toPath()), '')
+        def metadata = new JsonSlurper().parse(entries['fabric.mod.json'])
+        if (metadata.version != project.version || metadata.authors != ['Miaek']) {
+            throw new GradleException('Release metadata does not match the project.')
+        }
+        ['LICENSE', 'assets/wordcraft/icon.png', 'META-INF/THIRD_PARTY.md',
+         'META-INF/wordcraft-licenses/LGPL-3.0.txt', 'pl/wordcraft/client/WordcraftClient.class',
+         'pl/wordcraft/core/BulkDownloader.class', 'pl/wordcraft/download/OfficialHttp.class',
+         'pl/wordcraft/media/MediaPlayer.class'].each { name ->
+            if (!entries.containsKey(name)) throw new GradleException("Missing distribution member: ${name}")
+        }
+        if (metadata.jars.size() != 11) throw new GradleException('Expected 11 embedded media libraries.')
+        metadata.jars.each { library ->
+            if (!entries.containsKey(library.file)) throw new GradleException("Missing embedded library: ${library.file}")
+        }
+        ['linux-x86_64', 'windows-x86_64', 'macosx-x86_64', 'macosx-arm64'].each { platform ->
+            if (!entries.containsKey("META-INF/jars/ffmpeg-7.1.1-1.5.12-${platform}.jar".toString())
+                    || !entries.containsKey("META-INF/jars/javacpp-1.5.12-${platform}.jar".toString())) {
+                throw new GradleException("Missing native platform: ${platform}")
+            }
+        }
+        logger.lifecycle('Verified release metadata, licenses, 11 media libraries and all four native platforms; no CLI programs.')
+    }
+}
+check.dependsOn verifyDistribution
+
+// Existing regression harnesses exercise the recovered implementation with
+// local fixtures. They do not download the official learning materials.
+def regressionTests = ['VideoAnswerTest', 'VideoAnswerUiTest', 'MediaFallbackTest',
+    'MediaFallbackUiTest', 'BulkDownloadTest', 'BulkRangeTransferTest',
+    'BulkInventoryUiTest', 'DownloadDisplayTest']
+regressionTests.each { testClass ->
+    tasks.register("run${testClass}", JavaExec) {
+        dependsOn testClasses
+        classpath = sourceSets.test.runtimeClasspath
+        mainClass = testClass
+        jvmArgs '-Xverify:all', '-Djava.awt.headless=true'
+    }
+}
+tasks.register('regressionTest') {
+    group = 'verification'
+    description = 'Run local download, media recovery and UI linkage regression tests.'
+    dependsOn test
+}
+test {
+    useJUnitPlatform()
+    jvmArgs '-Xverify:all', '-Djava.awt.headless=true'
+}
