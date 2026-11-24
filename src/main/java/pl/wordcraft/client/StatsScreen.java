@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.item.Items;
 import pl.wordcraft.core.ExamSession;
@@ -184,14 +184,13 @@ final class StatsScreen extends WordcraftScreen {
 
     private void openRow(StatsScreen.Row row) {
         if (row.exam() != null) {
-            this.minecraft.gui.setScreen(new ExamResultsScreen(this.app, this, row.exam(), ""));
+            this.minecraft.setScreen(new ExamResultsScreen(this.app, this, row.exam(), ""));
         } else {
             Optional<Question> question = row.answer() != null
                 ? this.app.questionById(row.id())
                 : this.app.usable().stream().filter(q -> q.id().equals(row.id())).findFirst();
             if (question.isPresent()) {
                 this.minecraft
-                    .gui
                     .setScreen(
                         row.answer() == null
                             ? QuestionScreen.practice(this.app, this, question.get(), false)
@@ -224,7 +223,7 @@ final class StatsScreen extends WordcraftScreen {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
+    public void render(GuiGraphics g, int mx, int my, float delta) {
         String percent = String.format(Locale.forLanguageTag("pl-PL"), "%.1f%%", this.app.stats().correctPercent());
         this.backdrop(g, "Rozwiązano: " + this.app.stats().solvedCount() + " · poprawne: " + percent);
         int area = Math.min(600, this.width - 24);
@@ -238,8 +237,8 @@ final class StatsScreen extends WordcraftScreen {
             g.fill(left + 1, y - 2, left + 3, y + 43 - 9, this.view == StatsScreen.View.EXAMS ? -800132 : -7487489);
             int textWidth = area - (this.view == StatsScreen.View.EXAMS ? 72 : 122);
             g.enableScissor(left + 4, y, left + 4 + Math.max(40, textWidth), y + 43 - 6);
-            g.text(this.font, this.font.plainSubstrByWidth(row.heading(), Math.max(40, textWidth)), left + 7, y + 2, -1182209, false);
-            g.text(this.font, this.font.plainSubstrByWidth(row.detail(), Math.max(40, textWidth)), left + 7, y + 16, -5653041, false);
+            g.drawString(this.font, this.font.plainSubstrByWidth(row.heading(), Math.max(40, textWidth)), left + 7, y + 2, -1182209, false);
+            g.drawString(this.font, this.font.plainSubstrByWidth(row.detail(), Math.max(40, textWidth)), left + 7, y + 16, -5653041, false);
             g.disableScissor();
         }
 
@@ -257,8 +256,8 @@ final class StatsScreen extends WordcraftScreen {
         }
 
         String label = "Strona " + (this.page + 1) + "/" + this.pageCount();
-        g.text(this.font, label, this.width / 2 - this.font.width(label) / 2, this.height - 47, -5653041, false);
-        super.extractRenderState(g, mx, my, delta);
+        g.drawString(this.font, label, this.width / 2 - this.font.width(label) / 2, this.height - 47, -5653041, false);
+        super.render(g, mx, my, delta);
     }
 
     @Override

@@ -2,7 +2,7 @@ package pl.wordcraft.client;
 
 import java.util.List;
 import java.util.Locale;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.item.Items;
 import pl.wordcraft.core.ExamSession;
@@ -35,7 +35,7 @@ final class ExamResultsScreen extends WordcraftScreen {
                 left,
                 top + 108,
                 area,
-                () -> this.minecraft.gui.setScreen(new ExamReviewScreen(this.app, this, this.result, true)),
+                () -> this.minecraft.setScreen(new ExamReviewScreen(this.app, this, this.result, true)),
                 this.errors > 0 ? WordcraftScreen.Tone.DANGER : WordcraftScreen.Tone.QUIET,
                 Items.REDSTONE
             )
@@ -45,7 +45,7 @@ final class ExamResultsScreen extends WordcraftScreen {
                 left,
                 top + 132,
                 area,
-                () -> this.minecraft.gui.setScreen(new ExamReviewScreen(this.app, this, this.result, false)),
+                () -> this.minecraft.setScreen(new ExamReviewScreen(this.app, this, this.result, false)),
                 WordcraftScreen.Tone.SECONDARY,
                 Items.BOOK
             )
@@ -60,7 +60,6 @@ final class ExamResultsScreen extends WordcraftScreen {
                 this.height - 26,
                 half,
                 () -> this.minecraft
-                    .gui
                     .setScreen(
                         new TextScreen(
                             "WORDcraft · Przerwany egzamin", List.of(this.mediaError, "Zapisano odpowiedzi zatwierdzone przed przerwaniem egzaminu."), this
@@ -77,7 +76,7 @@ final class ExamResultsScreen extends WordcraftScreen {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
+    public void render(GuiGraphics g, int mx, int my, float delta) {
         this.backdrop(g, "Wynik zapisany · przeglądanie odpowiedzi nie zmienia postępów");
         int area = Math.min(500, this.width - 24);
         int left = (this.width - area) / 2;
@@ -87,12 +86,12 @@ final class ExamResultsScreen extends WordcraftScreen {
         g.fill(left + 1, top + 1, left + 4, top + 56, accent);
         this.itemIcon(g, this.result.passed() ? Items.EMERALD : (this.result.aborted() ? Items.CLOCK : Items.REDSTONE), left + 11, top + 11);
         String state = this.result.aborted() ? "Egzamin przerwany" : (this.result.passed() ? "Egzamin zaliczony" : "Egzamin niezaliczony");
-        g.text(this.font, state, left + 34, top + 10, accent, false);
-        g.text(this.font, this.result.score() + " / " + this.result.maxScore() + " pkt · próg 68 pkt", left + 34, top + 25, -1182209, false);
+        g.drawString(this.font, state, left + 34, top + 10, accent, false);
+        g.drawString(this.font, this.result.score() + " / " + this.result.maxScore() + " pkt · próg 68 pkt", left + 34, top + 25, -1182209, false);
         String note = this.notPresented > 0
             ? "Nieprzedstawione pytania: " + this.notPresented + " (poza listą błędów)"
             : "Możesz teraz sprawdzić odpowiedzi i ich wyjaśnienia.";
-        g.text(this.font, this.font.plainSubstrByWidth(note, area - 24), left + 12, top + 42, -5653041, false);
+        g.drawString(this.font, this.font.plainSubstrByWidth(note, area - 24), left + 12, top + 42, -5653041, false);
         int tileWidth = (area - 8) / 3;
         this.metric(g, left, top + 64, tileWidth, "Poprawne", Integer.toString(this.correct), -9117498);
         this.metric(g, left + tileWidth + 4, top + 64, tileWidth, "Błędy / brak", Integer.toString(this.errors), -1009005);
@@ -106,12 +105,12 @@ final class ExamResultsScreen extends WordcraftScreen {
             seconds / 60L + ":" + String.format(Locale.ROOT, "%02d", seconds % 60L),
             -7487489
         );
-        super.extractRenderState(g, mx, my, delta);
+        super.render(g, mx, my, delta);
     }
 
-    private void metric(GuiGraphicsExtractor g, int x, int y, int w, String label, String value, int color) {
+    private void metric(GuiGraphics g, int x, int y, int w, String label, String value, int color) {
         this.card(g, x, y, w, 36);
-        g.text(this.font, label, x + 8, y + 6, -5653041, false);
-        g.text(this.font, value, x + 8, y + 20, color, false);
+        g.drawString(this.font, label, x + 8, y + 6, -5653041, false);
+        g.drawString(this.font, value, x + 8, y + 20, color, false);
     }
 }

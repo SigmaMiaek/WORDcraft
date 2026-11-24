@@ -1,7 +1,7 @@
 package pl.wordcraft.client;
 
 import java.util.List;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -54,16 +54,16 @@ extends WordcraftScreen {
                 this.rebuildWidgets();
             }, WordcraftScreen.Tone.QUIET);
             this.automaticButton = this.themedButton(this.automaticLabel(), left + 7, 133, area - 14, this.app::prepareAutomatic, WordcraftScreen.Tone.SECONDARY, Items.COMPASS);
-            this.themedButton("Raport bazy", left + 7, 157, half - 7, () -> this.minecraft.gui.setScreen((Screen)new TextScreen("WORDcraft \u00b7 Baza pyta\u0144", this.app.audit().isEmpty() ? List.of(this.app.status()) : this.app.audit(), (Screen)this)), WordcraftScreen.Tone.QUIET, Items.PAPER);
-            this.manualImport = this.themedButton("Import z plik\u00f3w\u2026", left + half + 6, 157, half - 7, () -> this.minecraft.gui.setScreen((Screen)new ManualImportScreen(this.app, (Screen)this)), WordcraftScreen.Tone.QUIET, Items.CHEST);
+            this.themedButton("Raport bazy", left + 7, 157, half - 7, () -> this.minecraft.setScreen((Screen)new TextScreen("WORDcraft \u00b7 Baza pyta\u0144", this.app.audit().isEmpty() ? List.of(this.app.status()) : this.app.audit(), (Screen)this)), WordcraftScreen.Tone.QUIET, Items.PAPER);
+            this.manualImport = this.themedButton("Import z plik\u00f3w\u2026", left + half + 6, 157, half - 7, () -> this.minecraft.setScreen((Screen)new ManualImportScreen(this.app, (Screen)this)), WordcraftScreen.Tone.QUIET, Items.CHEST);
             this.button("Wr\u00f3\u0107", this.width / 2 - 60, this.height - 26, 120, () -> {
                 this.preferences = false;
                 this.rebuildWidgets();
             });
         } else {
             this.themedButton("Pytanie r\u0119cznie", left, 108, half, () -> this.app.requestQuestion(this, false, false), WordcraftScreen.Tone.PRIMARY, Items.BOOK);
-            this.themedButton("Statystyki i powt\u00f3rki", left + half + 6, 108, area - half - 6, () -> this.minecraft.gui.setScreen((Screen)new StatsScreen(this.app, (Screen)this)), WordcraftScreen.Tone.SECONDARY, Items.EXPERIENCE_BOTTLE);
-            this.themedButton("Rozpocznij pr\u00f3bny egzamin", left, 132, area, () -> this.minecraft.gui.setScreen((Screen)new ExamIntroScreen(this.app, (Screen)this)), WordcraftScreen.Tone.AMBER, Items.GOLD_INGOT);
+            this.themedButton("Statystyki i powt\u00f3rki", left + half + 6, 108, area - half - 6, () -> this.minecraft.setScreen((Screen)new StatsScreen(this.app, (Screen)this)), WordcraftScreen.Tone.SECONDARY, Items.EXPERIENCE_BOTTLE);
+            this.themedButton("Rozpocznij pr\u00f3bny egzamin", left, 132, area, () -> this.minecraft.setScreen((Screen)new ExamIntroScreen(this.app, (Screen)this)), WordcraftScreen.Tone.AMBER, Items.GOLD_INGOT);
             this.automaticButton = this.themedButton(this.automaticLabel(), left, 167, half, this.app::prepareAutomatic, WordcraftScreen.Tone.QUIET);
             this.themedButton("Ustawienia nauki", left + half + 6, 167, area - half - 6, () -> {
                 this.preferences = true;
@@ -80,7 +80,7 @@ extends WordcraftScreen {
         int left = (this.width - area) / 2;
         int half = (area - 6) / 2;
         this.bulkButton = this.themedButton("Materiały (eksperymentalne)", left, 191, half,
-                () -> this.minecraft.gui.setScreen(new BulkDownloadScreen(this.app, this)), WordcraftScreen.Tone.AMBER);
+                () -> this.minecraft.setScreen(new BulkDownloadScreen(this.app, this)), WordcraftScreen.Tone.AMBER);
         this.themedButton("Folder materiałów", left + half + 6, 191, area - half - 6,
                 () -> BulkMediaFeature.openFolder(this.app, this), WordcraftScreen.Tone.QUIET, Items.CHEST);
     }
@@ -102,7 +102,7 @@ extends WordcraftScreen {
         }
     }
 
-    public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
+    public void render(GuiGraphics g, int mx, int my, float delta) {
         this.backdrop(g, this.preferences ? "Dopasuj nauk\u0119 do swojego rytmu" : "Kategoria B \u00b7 oficjalne pytania \u00b7 Twoje tempo");
         int area = Math.min(520, this.width - 24);
         int left = (this.width - area) / 2;
@@ -115,10 +115,10 @@ extends WordcraftScreen {
             this.card(g, left, 45, area, 40);
             this.itemIcon(g, this.app.usable().isEmpty() ? Items.COMPASS : Items.EMERALD, left + 9, 56);
             String state = this.app.importing() ? "Przygotowywanie bazy" : (this.app.usable().isEmpty() ? "Baza wymaga przygotowania" : "Baza gotowa \u00b7 " + this.app.usable().size() + " pyta\u0144");
-            g.text(this.font, state, left + 33, 53, this.app.usable().isEmpty() ? -800132 : -9117498, false);
-            g.text(this.font, this.font.plainSubstrByWidth(this.app.status(), area - 44), left + 33, 68, -5653041, false);
+            g.drawString(this.font, state, left + 33, 53, this.app.usable().isEmpty() ? -800132 : -9117498, false);
+            g.drawString(this.font, this.font.plainSubstrByWidth(this.app.status(), area - 44), left + 33, 68, -5653041, false);
             this.section(g, "WYBIERZ, CO CHCESZ \u0106WICZY\u0106", left, 95, area);
         }
-        super.extractRenderState(g, mx, my, delta);
+        super.render(g, mx, my, delta);
     }
 }

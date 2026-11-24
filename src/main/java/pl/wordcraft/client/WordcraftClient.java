@@ -27,19 +27,18 @@ import java.util.concurrent.TimeUnit;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.KeyMapping.Category;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
 import org.slf4j.Logger;
@@ -108,19 +107,19 @@ public final class WordcraftClient implements ClientModInitializer {
             String percent = total > 0L ? " " + Math.min(100L, bytes * 100L / total) + "%" : "";
             this.downloadStatus = text + percent;
         });
-        Category category = Category.register(Identifier.fromNamespaceAndPath("wordcraft", "learning"));
-        this.settingsKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.wordcraft.settings", Type.KEYSYM, 75, category));
-        this.questionKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.wordcraft.question", Type.KEYSYM, 74, category));
+        String category = "key.category.wordcraft.learning";
+        this.settingsKey = KeyBindingHelper.registerKeyBinding(new KeyMapping("key.wordcraft.settings", Type.KEYSYM, 75, category));
+        this.questionKey = KeyBindingHelper.registerKeyBinding(new KeyMapping("key.wordcraft.question", Type.KEYSYM, 74, category));
         ScreenEvents.AFTER_INIT.register((mc, screen, w, h) -> {
             if (screen instanceof TitleScreen || screen instanceof PauseScreen) {
-                Screens.getWidgets(screen).add(Button.builder(Component.literal("WORDcraft"), b -> this.openSettings(screen)).bounds(8, 8, 94, 20).build());
+                Screens.getButtons(screen).add(Button.builder(Component.literal("WORDcraft"), b -> this.openSettings(screen)).bounds(8, 8, 94, 20).build());
             }
         });
         ClientTickEvents.END_CLIENT_TICK.register(this::tick);
         ClientLifecycleEvents.CLIENT_STOPPING.register(mc -> {
             this.shuttingDown = true;
             this.downloads.shutdownNow();
-            if (mc.gui.screen() instanceof QuestionScreen q) {
+            if (mc.screen instanceof QuestionScreen q) {
                 q.recordAbortedOnExit();
                 q.stopMedia();
             }
@@ -181,13 +180,13 @@ public final class WordcraftClient implements ClientModInitializer {
         long now = System.nanoTime();
 
         while (this.settingsKey.consumeClick()) {
-            if (this.initialized && !(mc.gui.screen() instanceof QuestionScreen) && !(mc.gui.screen() instanceof ExamPreparationScreen)) {
-                this.openSettings(mc.gui.screen());
+            if (this.initialized && !(mc.screen instanceof QuestionScreen) && !(mc.screen instanceof ExamPreparationScreen)) {
+                this.openSettings(mc.screen);
             }
         }
 
         while (this.questionKey.consumeClick()) {
-            if (this.initialized && mc.gui.screen() == null) {
+            if (this.initialized && mc.screen == null) {
                 this.requestQuestion(null, false, false);
             }
         }
@@ -196,12 +195,12 @@ public final class WordcraftClient implements ClientModInitializer {
             boolean world = mc.level != null
                 && mc.player != null
                 && mc.player.isAlive()
-                && mc.gui.screen() == null
-                && mc.gui.overlay() == null
+                && mc.screen == null
+                && mc.getOverlay() == null
                 && !mc.isPaused()
                 && mc.isWindowActive();
             this.updateThreats(mc, now);
-            if (mc.level != null && mc.gui.screen() instanceof QuestionScreen q && q.isAutomaticPractice() && this.unsafeEnvironment(mc, now)) {
+            if (mc.level != null && mc.screen instanceof QuestionScreen q && q.isAutomaticPractice() && this.unsafeEnvironment(mc, now)) {
                 PracticeSession session = q.practiceSession();
                 this.delayedPractice = session == null || !q.unanswered() && !session.advance() ? null : session;
                 q.deferForSafety();
@@ -215,7 +214,7 @@ public final class WordcraftClient implements ClientModInitializer {
             if (safe && this.delayedPractice != null && this.store.config().enabled && this.store.config().mode == WordcraftConfig.Mode.FREE) {
                 PracticeSession session = this.delayedPractice;
                 this.delayedPractice = null;
-                mc.gui.setScreen(QuestionScreen.automatic(this, null, session));
+                mc.setScreen(QuestionScreen.automatic(this, null, session));
                 this.scheduler.reset(now);
             } else if (this.scheduler
                 .tick(now, world, safe && !this.usable.isEmpty() && this.store.config().mode == WordcraftConfig.Mode.FREE, this.store.config())) {
@@ -257,7 +256,7 @@ public final class WordcraftClient implements ClientModInitializer {
     }
 
     public void openSettings(Screen parent) {
-        Minecraft.getInstance().gui.setScreen(new SettingsScreen(this, parent));
+        Minecraft.getInstance().setScreen(new SettingsScreen(this, parent));
     }
 
     public void requestQuestion(Screen parent, boolean automatic, boolean reviewOnly) {
@@ -265,7 +264,7 @@ public final class WordcraftClient implements ClientModInitializer {
         if (automatic && !pool.isEmpty()) {
             PracticeSession session = PracticeSession.create(pool, this.picker, this.stats(), this.random);
             this.scheduler.reset(System.nanoTime());
-            Minecraft.getInstance().gui.setScreen(QuestionScreen.automatic(this, parent, session));
+            Minecraft.getInstance().setScreen(QuestionScreen.automatic(this, parent, session));
         } else {
             Optional<Question> chosen = this.picker.pick(pool, this.stats(), this.random);
             if (chosen.isEmpty()) {
@@ -281,7 +280,7 @@ public final class WordcraftClient implements ClientModInitializer {
                 );
             } else {
                 this.scheduler.reset(System.nanoTime());
-                Minecraft.getInstance().gui.setScreen(QuestionScreen.practice(this, parent, chosen.get(), automatic));
+                Minecraft.getInstance().setScreen(QuestionScreen.practice(this, parent, chosen.get(), automatic));
             }
         }
     }
@@ -289,14 +288,14 @@ public final class WordcraftClient implements ClientModInitializer {
     public void startExam(Screen parent) {
         try {
             ExamSession session = ExamSession.create(this.usable, this.random, System.nanoTime());
-            Minecraft.getInstance().gui.setScreen(new ExamPreparationScreen(this, parent, session));
+            Minecraft.getInstance().setScreen(new ExamPreparationScreen(this, parent, session));
         } catch (IllegalArgumentException ex) {
             this.message(parent, ex.getMessage());
         }
     }
 
     public void message(Screen parent, String text) {
-        Minecraft.getInstance().gui.setScreen(new TextScreen("WORDcraft", List.of(text), parent));
+        Minecraft.getInstance().setScreen(new TextScreen("WORDcraft", List.of(text), parent));
     }
 
     public void record(Question question, int selected) {

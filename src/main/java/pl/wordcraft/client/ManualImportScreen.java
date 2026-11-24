@@ -4,7 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -73,16 +73,16 @@ final class ManualImportScreen extends WordcraftScreen {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
+    public void render(GuiGraphics g, int mx, int my, float delta) {
         this.backdrop(g, "Opcjonalne — tryb automatyczny nie wymaga tych pól");
         int area = Math.min(480, this.width - 24);
         int left = (this.width - area) / 2;
         this.card(g, left, 45, area, 126);
-        g.text(this.font, "Oficjalny arkusz pytań (.xlsx)", left + 8, 55, -5653041, false);
-        g.text(this.font, "Folder oryginalnych zdjęć i filmów", left + 8, 98, -5653041, false);
+        g.drawString(this.font, "Oficjalny arkusz pytań (.xlsx)", left + 8, 55, -5653041, false);
+        g.drawString(this.font, "Folder oryginalnych zdjęć i filmów", left + 8, 98, -5653041, false);
         g.enableScissor(left, 179, left + area, this.height - 35);
         this.paragraph(g, this.app.status(), left, 179, area, -9117498);
         g.disableScissor();
-        super.extractRenderState(g, mx, my, delta);
+        super.render(g, mx, my, delta);
     }
 }

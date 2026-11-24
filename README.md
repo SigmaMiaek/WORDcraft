@@ -2,6 +2,8 @@
 
 A client-side Fabric mod for practising Polish category B driving theory questions while playing Minecraft.
 
+This branch (`mc-1.21.1`) contains the **Minecraft 1.21.1 / Java 21** port of WORDcraft 1.6.0. The Minecraft 26.2 edition remains on `main`.
+
 Author: **Miaek** · Version: **1.6.0** · Mod code: **MIT**
 
 This is the recovered source project for the working 1.6.0 release. It combines code recovered from that release with preserved sources of its fixes. The original development project and some comments and local variable names were unavailable. See [RECOVERY.md](RECOVERY.md).
@@ -20,16 +22,16 @@ The official question bank and learning media are **not included** in this repos
 
 ## Requirements
 
-- Minecraft **26.2**
+- Minecraft **1.21.1**
 - Fabric Loader **0.19.5 or later**
-- Fabric API **0.161.0+26.2**
-- **JDK 25** to build; Java 25 or later to run
+- Fabric API **0.116.18+1.21.1**
+- **JDK 21** to build; Java 21 or later to run
 
 Supported native bundles: Linux x86-64, Windows x86-64, macOS x86-64 and macOS ARM64.
 
 ## Build
 
-Install a full JDK 25 and point `JAVA_HOME` to it. A Java runtime without the compiler is insufficient. Gradle is downloaded by the wrapper; no separate Gradle installation is required.
+Install a full JDK 21 and point `JAVA_HOME` to it. A Java runtime without the compiler is insufficient. Gradle is downloaded by the wrapper; no separate Gradle installation is required.
 
 ```sh
 ./gradlew build
@@ -39,8 +41,10 @@ On Windows, use `gradlew.bat build`. The first build needs an internet connectio
 
 Outputs:
 
-- `build/libs/wordcraft-1.6.0.jar` — installable mod, including the supported native media libraries.
-- `build/libs/wordcraft-1.6.0-sources.jar` — mod Java sources and resources.
+- `build/libs/wordcraft-1.6.0-mc1.21.1.jar` — installable, remapped mod, including the supported native media libraries.
+- `build/libs/wordcraft-1.6.0-mc1.21.1-sources.jar` — mod Java sources and resources.
+
+Install only the `-mc1.21.1.jar` in a Fabric 1.21.1 profile. Files marked `dev` are development outputs.
 
 The build filters unused command-line programs from the nested media bundles and compresses the archives. The JNI libraries and third-party notices are retained.
 

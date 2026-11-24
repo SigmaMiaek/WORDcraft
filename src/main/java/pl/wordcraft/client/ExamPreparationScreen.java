@@ -3,7 +3,7 @@ package pl.wordcraft.client;
 import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.item.Items;
 import pl.wordcraft.core.ExamMediaPlan;
@@ -34,13 +34,13 @@ final class ExamPreparationScreen extends WordcraftScreen {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
+    public void render(GuiGraphics g, int mx, int my, float delta) {
         this.backdrop(g, "Przygotowuję pierwsze pytanie");
         int area = Math.min(500, this.width - 28);
         int left = (this.width - area) / 2;
         this.card(g, left, 54, area, Math.max(115, this.height - 100));
         this.itemIcon(g, Items.CLOCK, left + 10, 64);
-        g.text(this.font, "Za chwilę możesz zaczynać", left + 33, 68, -800132, false);
+        g.drawString(this.font, "Za chwilę możesz zaczynać", left + 33, 68, -800132, false);
         int y = this.paragraph(
                 g,
                 "Egzamin ruszy po przygotowaniu pierwszego zadania. Zdjęcia i filmy do pozostałych pytań pobiorą się w tle podczas rozwiązywania.",
@@ -53,7 +53,7 @@ final class ExamPreparationScreen extends WordcraftScreen {
         g.enableScissor(left + 9, y, left + area - 9, this.height - 38);
         this.paragraph(g, this.app.mediaStatus(), left + 10, y, area - 20, -5653041);
         g.disableScissor();
-        super.extractRenderState(g, mx, my, delta);
+        super.render(g, mx, my, delta);
     }
 
     @Override
@@ -100,7 +100,7 @@ final class ExamPreparationScreen extends WordcraftScreen {
                 this.cancelled = true;
                 QuestionScreen var1 = QuestionScreen.exam(this.app, this.parent, this.selected.freshCopy(System.nanoTime()), this.plan);
                 var1.useMediaFallback(this.mediaFallback);
-                this.minecraft.gui.setScreen(var1);
+                this.minecraft.setScreen(var1);
                 this.plan.startBackground();
             }
         }

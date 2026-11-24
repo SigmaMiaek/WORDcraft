@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -463,7 +463,7 @@ public final class QuestionScreen extends WordcraftScreen {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
+    public void render(GuiGraphics g, int mx, int my, float delta) {
         if (this.player != null) {
             this.texture.update(this.player.pollFrame());
         }
@@ -471,7 +471,7 @@ public final class QuestionScreen extends WordcraftScreen {
         if (!this.question.basic()) {
             this.renderAbc(g);
             this.renderFooter(g);
-            super.extractRenderState(g, mx, my, delta);
+            super.render(g, mx, my, delta);
         } else {
             this.backdrop(g, this.subtitle());
             int bottom = this.height - 78;
@@ -540,11 +540,11 @@ public final class QuestionScreen extends WordcraftScreen {
             g.disableScissor();
             this.scrollBar(g, bottom);
             this.renderFooter(g);
-            super.extractRenderState(g, mx, my, delta);
+            super.render(g, mx, my, delta);
         }
     }
 
-    private void renderFooter(GuiGraphicsExtractor g) {
+    private void renderFooter(GuiGraphics g) {
         g.fill(0, this.height - 76, this.width, this.height, -15919326);
         g.fill(14, this.height - 77, this.width - 14, this.height - 76, -13547171);
         if (this.exam != null) {
@@ -562,7 +562,7 @@ public final class QuestionScreen extends WordcraftScreen {
                 progress = progress + " · ponowię brakujące";
             }
 
-            g.text(
+            g.drawString(
                 this.font,
                 this.font.plainSubstrByWidth(progress, this.width - 28),
                 14,
@@ -587,7 +587,7 @@ public final class QuestionScreen extends WordcraftScreen {
         }
     }
 
-    private void renderAbc(GuiGraphicsExtractor g) {
+    private void renderAbc(GuiGraphics g) {
         String status = this.subtitle();
         if (this.submitted && this.reviewedAnswer == null) {
             status = this.feedbackText() + " · " + status;
@@ -633,7 +633,7 @@ public final class QuestionScreen extends WordcraftScreen {
             }
 
             if (this.player != null && this.player.warning() != null && !this.player.warning().isBlank()) {
-                g.text(this.font, this.font.plainSubstrByWidth(this.player.warning(), w - 8), x + 4, y + h - 12, -800132, false);
+                g.drawString(this.font, this.font.plainSubstrByWidth(this.player.warning(), w - 8), x + 4, y + h - 12, -800132, false);
             }
 
             g.disableScissor();
@@ -648,21 +648,21 @@ public final class QuestionScreen extends WordcraftScreen {
         this.scroll = 0;
     }
 
-    private void scaledParagraph(GuiGraphicsExtractor g, String text, int x, int y, int w, float scale, int color) {
+    private void scaledParagraph(GuiGraphics g, String text, int x, int y, int w, float scale, int color) {
         List<FormattedCharSequence> lines = this.font.split(Component.literal(text), Math.max(1, (int)Math.floor(w / scale)));
-        g.pose().pushMatrix();
+        g.pose().pushPose();
 
         try {
-            g.pose().translate(x, y);
-            g.pose().scale(scale, scale);
+            g.pose().translate(x, y, 0);
+            g.pose().scale(scale, scale, 1.0F);
             int lineY = 0;
 
             for (FormattedCharSequence line : lines) {
-                g.text(this.font, line, 0, lineY, color, false);
+                g.drawString(this.font, line, 0, lineY, color, false);
                 lineY += 9 + 1;
             }
         } finally {
-            g.pose().popMatrix();
+            g.pose().popPose();
         }
     }
 
@@ -676,7 +676,7 @@ public final class QuestionScreen extends WordcraftScreen {
             this.recordedExam = true;
             ExamSession.Result result = this.exam.result().orElseThrow();
             this.app.recordExam(result);
-            this.minecraft.gui.setScreen(new ExamResultsScreen(this.app, this.parent, result, this.mediaError));
+            this.minecraft.setScreen(new ExamResultsScreen(this.app, this.parent, result, this.mediaError));
         }
     }
 
@@ -705,7 +705,7 @@ public final class QuestionScreen extends WordcraftScreen {
             }
         }
 
-        this.minecraft.gui.setScreen(new TextScreen("WORDcraft · Dlaczego ta odpowiedź?", lines, this));
+        this.minecraft.setScreen(new TextScreen("WORDcraft · Dlaczego ta odpowiedź?", lines, this));
     }
 
     public void stopMedia() {
@@ -734,7 +734,7 @@ public final class QuestionScreen extends WordcraftScreen {
     public void deferForSafety() {
         this.deferred = true;
         this.stopMedia();
-        this.minecraft.gui.setScreen(null);
+        this.minecraft.setScreen(null);
     }
 
     @Override
@@ -847,7 +847,7 @@ public final class QuestionScreen extends WordcraftScreen {
         }
 
         var2.whenComplete((var2x, var3) -> this.minecraft.execute(() -> {
-            if (var1 == this.mediaGeneration && this.minecraft.gui.screen() == this) {
+            if (var1 == this.mediaGeneration && this.minecraft.screen == this) {
                 this.mediaPending = false;
                 if (var3 == null && var2x != null) {
                     if (this.mediaFallback != null) {
@@ -882,7 +882,7 @@ public final class QuestionScreen extends WordcraftScreen {
         }
 
         @Override
-        protected void extractContents(GuiGraphicsExtractor g, int mx, int my, float delta) {
+        protected void renderWidget(GuiGraphics g, int mx, int my, float delta) {
             boolean correct = QuestionScreen.this.submitted && this.index == QuestionScreen.this.correctAnswerIndex();
             boolean wrong = QuestionScreen.this.submitted && this.index == QuestionScreen.this.selected && !correct;
             boolean chosen = this.index == QuestionScreen.this.selected;
@@ -892,10 +892,10 @@ public final class QuestionScreen extends WordcraftScreen {
                 : (wrong ? -11916236 : (chosen ? -13940890 : (this.isHoveredOrFocused() && this.active ? -14336941 : -15194054)));
             g.fill(this.getX(), this.getY() + 2, this.getX() + this.getWidth(), this.getY() + this.getHeight() + 2, 1426063360);
             g.fill(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight(), background);
-            g.outline(this.getX(), this.getY(), this.getWidth(), this.getHeight(), accent);
+            g.renderOutline(this.getX(), this.getY(), this.getWidth(), this.getHeight(), accent);
             g.fill(this.getX(), this.getY(), this.getX() + 3, this.getY() + this.getHeight(), !chosen && !correct && !wrong ? -7487489 : accent);
             g.enableScissor(this.getX() + 4, this.getY() + 1, this.getX() + this.getWidth() - 1, this.getY() + this.getHeight() - 1);
-            g.text(
+            g.drawString(
                 QuestionScreen.this.font,
                 String.valueOf((char)(65 + this.index)),
                 this.getX() + 7,
@@ -914,7 +914,7 @@ public final class QuestionScreen extends WordcraftScreen {
             );
             g.disableScissor();
             if (!QuestionScreen.this.abcLayout.fullTextFits() && this.isHoveredOrFocused()) {
-                g.setTooltipForNextFrame(QuestionScreen.this.font, this.getMessage(), mx, my);
+                g.renderTooltip(QuestionScreen.this.font, this.getMessage(), mx, my);
             }
         }
     }

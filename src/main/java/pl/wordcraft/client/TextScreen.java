@@ -2,7 +2,7 @@ package pl.wordcraft.client;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
@@ -32,7 +32,7 @@ final class TextScreen extends WordcraftScreen {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
+    public void render(GuiGraphics g, int mx, int my, float delta) {
         this.backdrop(g, "Przewijanie: kółko myszy lub strzałki");
         this.card(g, 12, 44, this.width - 42, this.height - 84);
         g.enableScissor(18, 48, this.width - 35, this.height - 40);
@@ -41,11 +41,11 @@ final class TextScreen extends WordcraftScreen {
         int last = Math.min(this.wrapped.size(), first + (this.height - 78) / lineHeight + 3);
 
         for (int i = first; i < last; i++) {
-            g.text(this.font, this.wrapped.get(i), 21, 51 + i * lineHeight - this.scroll, -1182209, false);
+            g.drawString(this.font, this.wrapped.get(i), 21, 51 + i * lineHeight - this.scroll, -1182209, false);
         }
 
         g.disableScissor();
         this.scrollBar(g, this.height - 36);
-        super.extractRenderState(g, mx, my, delta);
+        super.render(g, mx, my, delta);
     }
 }

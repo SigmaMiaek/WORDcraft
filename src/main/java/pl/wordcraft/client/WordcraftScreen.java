@@ -2,13 +2,12 @@ package pl.wordcraft.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -49,17 +48,17 @@ abstract class WordcraftScreen extends Screen {
         }
     }
 
-    protected void card(GuiGraphicsExtractor g, int x, int y, int w, int h) {
+    protected void card(GuiGraphics g, int x, int y, int w, int h) {
         g.fill(x, y + 2, x + w, y + h + 2, 1610612736);
         g.fill(x, y, x + w, y + h, -15194054);
-        g.outline(x, y, w, h, -13547171);
+        g.renderOutline(x, y, w, h, -13547171);
     }
 
-    protected void itemIcon(GuiGraphicsExtractor g, Item item, int x, int y) {
+    protected void itemIcon(GuiGraphics g, Item item, int x, int y) {
         drawItemIcon(g, item, x, y);
     }
 
-    private static void drawItemIcon(GuiGraphicsExtractor g, Item item, int x, int y) {
+    private static void drawItemIcon(GuiGraphics g, Item item, int x, int y) {
         String path;
         if (item == Items.CLOCK) {
             path = "item/clock_00";
@@ -77,36 +76,36 @@ abstract class WordcraftScreen extends Screen {
             path = "item/" + BuiltInRegistries.ITEM.getKey(item).getPath();
         }
 
-        Identifier texture = Identifier.withDefaultNamespace("textures/" + path + ".png");
-        g.blit(RenderPipelines.GUI_TEXTURED, texture, x, y, 0.0F, 0.0F, 16, 16, 16, 16);
+        ResourceLocation texture = ResourceLocation.withDefaultNamespace("textures/" + path + ".png");
+        g.blit(texture, x, y, 0.0F, 0.0F, 16, 16, 16, 16);
     }
 
-    protected void section(GuiGraphicsExtractor g, String label, int x, int y, int w) {
-        g.text(this.font, label, x, y, -5653041, false);
+    protected void section(GuiGraphics g, String label, int x, int y, int w) {
+        g.drawString(this.font, label, x, y, -5653041, false);
         int start = x + this.font.width(label) + 8;
         if (start < x + w) {
             g.fill(start, y + 4, x + w, y + 5, -13547171);
         }
     }
 
-    protected void backdrop(GuiGraphicsExtractor g, String subtitle) {
+    protected void backdrop(GuiGraphics g, String subtitle) {
         g.fillGradient(0, 0, this.width, this.height, -15722201, -15457224);
         g.fill(0, 0, this.width, 38, -15457999);
         g.fill(0, 0, this.width, 2, -9117498);
         g.fill(0, 38, this.width, 39, -13547171);
         this.itemIcon(g, Items.KNOWLEDGE_BOOK, 12, 11);
-        g.text(this.font, this.title, 34, 10, -1182209, false);
+        g.drawString(this.font, this.title, 34, 10, -1182209, false);
         if (!subtitle.isBlank()) {
-            g.text(this.font, this.font.plainSubstrByWidth(subtitle, Math.max(30, this.width - 48)), 34, 24, -5653041, false);
+            g.drawString(this.font, this.font.plainSubstrByWidth(subtitle, Math.max(30, this.width - 48)), 34, 24, -5653041, false);
         }
 
         g.fill(0, this.height - 31, this.width, this.height, -15721943);
         g.fill(0, this.height - 32, this.width, this.height - 31, -14402994);
     }
 
-    protected int paragraph(GuiGraphicsExtractor g, String text, int x, int y, int w, int color) {
+    protected int paragraph(GuiGraphics g, String text, int x, int y, int w, int color) {
         for (FormattedCharSequence line : this.font.split(Component.literal(text), Math.max(40, w))) {
-            g.text(this.font, line, x, y, color);
+            g.drawString(this.font, line, x, y, color);
             y += 9 + 2;
         }
 
@@ -122,7 +121,7 @@ abstract class WordcraftScreen extends Screen {
         return Math.max(0, this.contentHeight - (bottom - 42));
     }
 
-    protected void scrollBar(GuiGraphicsExtractor g, int bottom) {
+    protected void scrollBar(GuiGraphics g, int bottom) {
         this.scroll = Math.min(this.scroll, this.maxScroll(bottom));
         if (this.contentHeight > bottom - 42) {
             int track = Math.max(12, bottom - 90);
@@ -140,8 +139,15 @@ abstract class WordcraftScreen extends Screen {
     }
 
     @Override
+    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        // Each WORDcraft screen already paints its opaque backdrop and content.
+        // Screen.render() in 1.21.1 calls this after that content, so the vanilla
+        // background blur would otherwise blur the mod itself before its widgets.
+    }
+
+    @Override
     public void onClose() {
-        this.minecraft.gui.setScreen(this.parent);
+        this.minecraft.setScreen(this.parent);
     }
 
     @Override
@@ -160,7 +166,7 @@ abstract class WordcraftScreen extends Screen {
         }
 
         @Override
-        protected void extractContents(GuiGraphicsExtractor g, int mx, int my, float delta) {
+        protected void renderWidget(GuiGraphics g, int mx, int my, float delta) {
             Font font = Minecraft.getInstance().font;
             boolean hovered = this.isHoveredOrFocused();
 
@@ -198,7 +204,7 @@ abstract class WordcraftScreen extends Screen {
             int h = this.getHeight();
             g.fill(x, y + 1, x + w, y + h + 1, 1426063360);
             g.fill(x, y, x + w, y + h, background);
-            g.outline(x, y, w, h, !this.active || !hovered && this.tone != WordcraftScreen.Tone.SELECTED ? -12889498 : accent);
+            g.renderOutline(x, y, w, h, !this.active || !hovered && this.tone != WordcraftScreen.Tone.SELECTED ? -12889498 : accent);
             if (this.tone != WordcraftScreen.Tone.QUIET) {
                 g.fill(x + 1, y + 1, x + 3, y + h - 1, accent);
             }
@@ -214,9 +220,9 @@ abstract class WordcraftScreen extends Screen {
             String full = this.getMessage().getString();
             String label = font.width(full) > remaining ? font.plainSubstrByWidth(full, Math.max(1, remaining - font.width("…"))) + "…" : full;
             int tx = this.icon != null && w >= 95 ? start : x + (w - font.width(label)) / 2;
-            g.text(font, label, tx, y + (h - 9) / 2, this.active ? -1182209 : -8875869, false);
+            g.drawString(font, label, tx, y + (h - 9) / 2, this.active ? -1182209 : -8875869, false);
             if (hovered && this.active && font.width(full) > remaining) {
-                g.setTooltipForNextFrame(font, this.getMessage(), mx, my);
+                g.renderTooltip(font, this.getMessage(), mx, my);
             }
         }
     }

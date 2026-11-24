@@ -3,7 +3,7 @@ package pl.wordcraft.client;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.item.Items;
 import pl.wordcraft.core.ExamSession;
@@ -64,7 +64,7 @@ final class ExamReviewScreen extends WordcraftScreen {
     private void open(ExamSession.AnswerResult answer) {
         Optional<Question> question = this.app.questionById(answer.questionId());
         if (question.isPresent()) {
-            this.minecraft.gui.setScreen(QuestionScreen.review(this.app, this, question.get(), answer));
+            this.minecraft.setScreen(QuestionScreen.review(this.app, this, question.get(), answer));
         } else {
             this.app.message(this, "Tego pytania nie ma w bieżącej bazie. Zachowano identyfikator i wynik odpowiedzi.");
         }
@@ -75,7 +75,7 @@ final class ExamReviewScreen extends WordcraftScreen {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
+    public void render(GuiGraphics g, int mx, int my, float delta) {
         this.backdrop(
             g,
             this.errorsOnly ? "Wybierz pytanie, aby zobaczyć swoją odpowiedź i wyjaśnienie" : "Kolejność z egzaminu · wybierz pytanie, aby zobaczyć szczegóły"
@@ -102,9 +102,9 @@ final class ExamReviewScreen extends WordcraftScreen {
                 ? "Twoja: " + answerLabel(question, answer.selectedIndex()) + " · poprawna: " + answerLabel(question, answer.correctIndex())
                 : "Nie zaliczono tego pytania do błędów.";
             g.enableScissor(left + 6, y + 3, left + 6 + textWidth, y + 49 - 7);
-            g.text(this.font, this.font.plainSubstrByWidth(heading, textWidth), left + 8, y + 5, accent, false);
-            g.text(this.font, this.font.plainSubstrByWidth(summary, textWidth), left + 8, y + 18, -1182209, false);
-            g.text(this.font, this.font.plainSubstrByWidth(choices, textWidth), left + 8, y + 31, -5653041, false);
+            g.drawString(this.font, this.font.plainSubstrByWidth(heading, textWidth), left + 8, y + 5, accent, false);
+            g.drawString(this.font, this.font.plainSubstrByWidth(summary, textWidth), left + 8, y + 18, -1182209, false);
+            g.drawString(this.font, this.font.plainSubstrByWidth(choices, textWidth), left + 8, y + 31, -5653041, false);
             g.disableScissor();
         }
 
@@ -115,8 +115,8 @@ final class ExamReviewScreen extends WordcraftScreen {
         }
 
         String label = "Strona " + (this.page + 1) + "/" + this.pageCount();
-        g.text(this.font, label, this.width / 2 - this.font.width(label) / 2, this.height - 47, -5653041, false);
-        super.extractRenderState(g, mx, my, delta);
+        g.drawString(this.font, label, this.width / 2 - this.font.width(label) / 2, this.height - 47, -5653041, false);
+        super.render(g, mx, my, delta);
     }
 
     private static String answerLabel(Question question, int index) {

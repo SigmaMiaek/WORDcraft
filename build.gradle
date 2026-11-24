@@ -6,15 +6,16 @@ import java.nio.file.StandardCopyOption
 import groovy.json.JsonSlurper
 
 plugins {
-    id 'net.fabricmc.fabric-loom' version "${loom_version}"
+    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
 }
 
 repositories { mavenCentral() }
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
-    implementation "net.fabricmc:fabric-loader:${loader_version}"
-    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
 
     ['javacv:1.5.12', 'javacpp:1.5.12', 'ffmpeg:7.1.1-1.5.12'].each { artifact ->
         implementation("org.bytedeco:${artifact}") { transitive = false }
@@ -39,12 +40,12 @@ processResources {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_25
-    targetCompatibility = JavaVersion.VERSION_25
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
     withSourcesJar()
 }
 tasks.withType(JavaCompile).configureEach {
-    options.release = 25
+    options.release = 21
     options.encoding = 'UTF-8'
     options.compilerArgs += '-Xlint:unchecked'
 }
@@ -80,6 +81,10 @@ cleanArchive = { byte[] bytes ->
 jar {
     from('LICENSE')
     from('CHANGELOG.md')
+}
+
+remapJar {
+    archiveFileName = "wordcraft-${project.version}-mc${minecraft_version}.jar"
     inputs.file('build.gradle')
     doLast {
         def archive = archiveFile.get().asFile.toPath()
@@ -90,12 +95,15 @@ jar {
 }
 
 tasks.named('sourcesJar') { from('LICENSE') }
+tasks.named('remapSourcesJar') {
+    archiveFileName = "wordcraft-${project.version}-mc${minecraft_version}-sources.jar"
+}
 
 tasks.register('verifyDistribution') {
     group = 'verification'
     description = 'Check the installable JAR, all native platforms and absence of unused CLI programs.'
-    dependsOn jar
-    inputs.file(tasks.jar.archiveFile)
+    dependsOn remapJar
+    inputs.file(tasks.remapJar.archiveFile)
     doLast {
         def inspect
         inspect = { byte[] bytes, String prefix ->
@@ -116,10 +124,13 @@ tasks.register('verifyDistribution') {
             }
             entries
         }
-        def entries = inspect(Files.readAllBytes(tasks.jar.archiveFile.get().asFile.toPath()), '')
+        def entries = inspect(Files.readAllBytes(tasks.remapJar.archiveFile.get().asFile.toPath()), '')
         def metadata = new JsonSlurper().parse(entries['fabric.mod.json'])
         if (metadata.version != project.version || metadata.authors != ['Miaek']) {
             throw new GradleException('Release metadata does not match the project.')
+        }
+        if (metadata.depends.minecraft != '1.21.1' || metadata.depends.java != '>=21') {
+            throw new GradleException('Distribution must target Minecraft 1.21.1 and Java 21.')
         }
         ['LICENSE', 'assets/wordcraft/icon.png', 'META-INF/THIRD_PARTY.md',
          'META-INF/wordcraft-licenses/LGPL-3.0.txt', 'pl/wordcraft/client/WordcraftClient.class',

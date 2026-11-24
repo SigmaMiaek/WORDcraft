@@ -1,5 +1,13 @@
 # WORDcraft 1.6.0
 
+## Minecraft 1.21.1 port
+
+- Added a Fabric build for Minecraft 1.21.1, compatible with Java 21.
+- Adapted screens, buttons, key bindings, media textures and the background download overlay to the Minecraft 1.21.1 APIs.
+- Retained the existing 1.6.0 features, Linux download fixes and native media libraries for Linux, Windows and macOS.
+
+## Changes in 1.6.0
+
 - Answers can now be selected and submitted before or during video playback in practice and exam modes, allowing users to continue without watching the entire video.
 - Failed media downloads now trigger a random replacement question. Exam replacements preserve the question type and point value without counting the failed download as an incorrect answer.
 - Added bounded recovery attempts, avoiding previously failed media and falling back to cached content or questions without media.
@@ -14,4 +22,4 @@
 - Added a custom project icon.
 - Reduced the JAR size through stronger lossless compression while retaining Linux, Windows, and macOS support.
 
-Requirements: Minecraft 26.2, Fabric, and Java 25 or later.
+Requirements for this build: Minecraft 1.21.1, Fabric, and Java 21 or later.

@@ -1,7 +1,7 @@
 package pl.wordcraft.client;
 
 import java.util.List;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
@@ -11,7 +11,7 @@ final class ExamIntroScreen extends WordcraftScreen {
     private static final List<String> RULES = List.of(
         "32 pytania: 20 podstawowych (TAK/NIE) i 12 specjalistycznych (A/B/C). Jedna odpowiedź jest poprawna.",
         "Maksymalnie 74 punkty. Aby zaliczyć, zdobądź co najmniej 68 punktów. Błędna lub niewskazana odpowiedź daje 0 punktów.",
-        "Podstawowe: 20 sekund na przeczytanie treści, następnie materiał i 15 sekund na odpowiedź. Film odtwarza się tylko raz, w całości; potem pozostaje ostatnia klatka. Nie ma powtórnego odtwarzania.",
+        "Podstawowe: 20 sekund na przeczytanie treści, następnie materiał i 15 sekund na odpowiedź. Odpowiedź można zaznaczyć i zatwierdzić przed rozpoczęciem lub w trakcie filmu. Film odtwarza się raz; po zakończeniu pozostaje ostatnia klatka.",
         "Mod przygotuje pierwsze zadanie i od razu je otworzy. Reszta materiałów pobiera się w tle; wskaźnik pokazuje postęp. Oczekiwanie na materiał bieżącego pytania wstrzymuje zegary. Specjalistyczne: 50 sekund na przeczytanie i odpowiedź. Limit egzaminu: 25 minut bez technicznego oczekiwania; czytanie, oglądanie i odpowiadanie zużywają czas.",
         "Możesz zmieniać wybór przed zatwierdzeniem. Przejście dalej lub upływ czasu zatwierdza odpowiedź. Nie można wrócić do poprzedniego pytania. Po zakończeniu wybierz Przejrzyj błędy lub Wszystkie pytania; podgląd pokazuje Twoją i poprawną odpowiedź oraz dostępne, sprawdzone wyjaśnienia. Dla części pytań nie ma jeszcze uzasadnień.",
         "W multiplayer świat i inni gracze nadal działają. Egzamin nie zatrzymuje walki ani nie chroni postaci. Uruchom go w bezpiecznym miejscu. W singleplayer ekran może wstrzymać świat, ale zegar egzaminu nadal biegnie.",
@@ -37,7 +37,7 @@ final class ExamIntroScreen extends WordcraftScreen {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
+    public void render(GuiGraphics g, int mx, int my, float delta) {
         this.backdrop(g, "Kat. B · 32 pytania · próg 68/74 · 25 minut");
         g.enableScissor(10, 42, this.width - 28, this.height - 38);
         int y = 45 - this.scroll;
@@ -76,6 +76,6 @@ final class ExamIntroScreen extends WordcraftScreen {
         this.contentHeight = y + this.scroll - 42;
         g.disableScissor();
         this.scrollBar(g, this.height - 38);
-        super.extractRenderState(g, mx, my, delta);
+        super.render(g, mx, my, delta);
     }
 }

@@ -1,7 +1,7 @@
 package pl.wordcraft.client;
 
 import java.util.List;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -52,7 +52,7 @@ final class BulkDownloadScreen extends WordcraftScreen {
         start.setMessage(Component.literal(label));
         start.active = !assets.isEmpty() && !app.importing() && state.state() != BulkDownloader.State.PAUSING;
     }
-    @Override public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
+    @Override public void render(GuiGraphics g, int mx, int my, float delta) {
         backdrop(g, "POBIERANIE WSZYSTKICH MATERIAŁÓW · EKSPERYMENTALNE");
         int area = Math.min(520, width - 24), left = (width - area) / 2;
         int bottom = height - 60;
@@ -77,6 +77,6 @@ final class BulkDownloadScreen extends WordcraftScreen {
         }
         contentHeight = y + scroll - 42;
         g.disableScissor();
-        super.extractRenderState(g, mx, my, delta);
+        super.render(g, mx, my, delta);
     }
 }
