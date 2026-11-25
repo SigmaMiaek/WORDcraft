@@ -171,6 +171,10 @@ public final class OfficialRepository {
         return mediaName != null && this.mediaSources.containsKey(mediaName);
     }
 
+    public List<String> httpsDiagnostics() {
+        return OfficialHttp.diagnostics();
+    }
+
     public synchronized Path ensureMedia(String mediaName) throws IOException {
         OfficialRepository.MediaSource source = this.mediaSources.get(mediaName);
         if (source == null) {

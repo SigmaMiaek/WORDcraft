@@ -2,6 +2,8 @@
 
 ## Windows HTTPS compatibility fix
 
+- Added a fingerprint-verified public Certum Trusted Root CA certificate for official downloads when an older Java or operating-system trust store lacks the CA used by gov.pl. The certificate is loaded from the mod, without downloading or trusting a certificate from a failed connection.
+- Added Java/runtime and trust-store diagnostics to preparation reports; passwords and custom trust-store paths are not displayed.
 - Combined Java's trusted CA certificates with the Windows current-user and local-machine root stores when downloading official learning materials.
 - Unavailable or empty Windows stores no longer discard Java's trusted CA certificates. Explicit JVM trust-store settings still take priority.
 - Kept HTTPS certificate-chain, expiry and hostname verification enabled.

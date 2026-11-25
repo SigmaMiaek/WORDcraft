@@ -425,12 +425,13 @@ public final class WordcraftClient implements ClientModInitializer {
                     });
                 } catch (Exception ex) {
                     LOG.error("Automatic preparation failed", ex);
-                    List<String> failureReport = pl.wordcraft.core.PreparationFailure.report(ex, this.downloadStatus);
+                    List<String> failureReport = new ArrayList<>(pl.wordcraft.core.PreparationFailure.report(ex, this.downloadStatus));
+                    failureReport.addAll(Math.min(2, failureReport.size()), this.repository.httpsDiagnostics());
                     Minecraft.getInstance().execute(() -> {
                         this.importing = false;
                         this.downloadStatus = "";
                         this.status = failureReport.getFirst();
-                        this.audit = failureReport;
+                        this.audit = List.copyOf(failureReport);
                     });
                 }
             });

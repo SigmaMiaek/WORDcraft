@@ -83,10 +83,39 @@ class OfficialHttpTest {
                 try (HttpClient client = OfficialHttp.client(Duration.ofSeconds(2))) {
                     assertSame(standard, client.sslContext(), name);
                 }
+                String diagnostic = String.join("\n", OfficialHttp.diagnostics());
+                assertTrue(diagnostic.contains(name.substring("javax.net.ssl.".length())));
+                assertFalse(diagnostic.contains("external-test-setting"));
             } finally {
                 if (old == null) System.clearProperty(name); else System.setProperty(name, old);
             }
         }
+    }
+
+    @Test void compatibilityCertificateMatchesThePublishedCertumRoot() throws Exception {
+        var certificate = OfficialCa.certificate();
+        assertEquals(OfficialCa.SHA256, HexFormat.of().formatHex(
+                MessageDigest.getInstance("SHA-256").digest(certificate.getEncoded())));
+        assertTrue(certificate.getBasicConstraints() >= 0);
+        certificate.checkValidity();
+        certificate.verify(certificate.getPublicKey());
+    }
+
+    @Test void compatibilityRootPreservesPlatformTrustAndAllHttpsChecks() throws Exception {
+        var trusted = OfficialHttp.officialTrustManager(manager(machineRoots));
+        assertEquals(2, trusted.getAcceptedIssuers().length);
+        assertTrue(Arrays.asList(trusted.getAcceptedIssuers()).contains(OfficialCa.certificate()));
+        assertEquals("ok", request(machineServer, trusted));
+        assertThrows(SSLHandshakeException.class, () -> request(unknownRoots, trusted));
+        assertThrows(SSLHandshakeException.class, () -> request(wrongHostServer, trusted));
+        assertThrows(SSLHandshakeException.class, () -> request(expiredServer, trusted));
+    }
+
+    @Test void compatibilityRootWorksWithMissingPlatformStoreAndDoesNotTrustArbitraryPeers() throws Exception {
+        var trusted = OfficialHttp.officialTrustManager(null);
+        assertEquals(1, trusted.getAcceptedIssuers().length);
+        assertEquals(OfficialCa.certificate(), trusted.getAcceptedIssuers()[0]);
+        assertThrows(SSLHandshakeException.class, () -> request(unknownRoots, trusted));
     }
 
     @Test @EnabledOnOs(OS.WINDOWS)

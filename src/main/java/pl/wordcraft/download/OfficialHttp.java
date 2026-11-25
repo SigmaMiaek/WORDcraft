@@ -12,8 +12,10 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Locale;
 import java.util.HexFormat;
+import java.util.List;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -28,10 +30,11 @@ final class OfficialHttp {
                 .connectTimeout(connectTimeout).followRedirects(HttpClient.Redirect.NEVER);
         if (!explicitTrustStore()) {
             String os = System.getProperty("os.name", "").toLowerCase(Locale.ROOT);
-            SSLContext context = os.startsWith("windows") ? WindowsContext.VALUE
+            TrustConfiguration configuration = os.startsWith("windows") ? WindowsContext.VALUE
                     : os.startsWith("linux") ? LinuxContext.VALUE : null;
-            if (context != null) {
-                builder.sslContext(context);
+            if (configuration == null) configuration = JavaContext.VALUE;
+            if (configuration != null) {
+                builder.sslContext(configuration.context());
             }
         }
         return builder.build();
@@ -114,17 +117,56 @@ final class OfficialHttp {
         target.setCertificateEntry(alias, certificate);
     }
 
-    private static SSLContext context(X509TrustManager manager)
-            throws GeneralSecurityException {
+    static X509TrustManager officialTrustManager(X509TrustManager platformRoots)
+            throws GeneralSecurityException, IOException {
+        KeyStore combined = KeyStore.getInstance(KeyStore.getDefaultType());
+        combined.load(null, null);
+        if (platformRoots != null) {
+            for (X509Certificate certificate : platformRoots.getAcceptedIssuers()) addRoot(combined, certificate);
+        }
+        // This is a published CA anchor, never a peer certificate learned from
+        // a failed connection. Leave all certificate and hostname checks to PKIX.
+        addRoot(combined, OfficialCa.certificate());
+        return trustManager(combined);
+    }
+
+    private record TrustConfiguration(SSLContext context, int roots) {}
+
+    private static TrustConfiguration context(X509TrustManager platformRoots)
+            throws GeneralSecurityException, IOException {
+        X509TrustManager manager = officialTrustManager(platformRoots);
         SSLContext context = SSLContext.getInstance("TLS");
         context.init(null, new TrustManager[]{manager}, null);
-        return context;
+        return new TrustConfiguration(context, manager.getAcceptedIssuers().length);
+    }
+
+    static List<String> diagnostics() {
+        String runtime = "Java: " + System.getProperty("java.version", "?") + " · "
+                + System.getProperty("java.vendor", "?") + " · " + System.getProperty("os.name", "?");
+        String clock = "Czas systemowy UTC: " + Instant.now();
+        if (explicitTrustStore()) {
+            StringBuilder options = new StringBuilder();
+            for (String name : new String[]{"trustStore", "trustStoreType", "trustStoreProvider", "trustStorePassword"}) {
+                if (System.getProperty("javax.net.ssl." + name) != null) {
+                    if (!options.isEmpty()) options.append(", ");
+                    options.append(name);
+                }
+            }
+            return List.of(runtime, clock, "TLS: własny magazyn JVM/launchera (" + options + "). Automatyczne certyfikaty moda nie nadpisują tej konfiguracji.");
+        }
+        String os = System.getProperty("os.name", "").toLowerCase(Locale.ROOT);
+        TrustConfiguration configuration = os.startsWith("windows") ? WindowsContext.VALUE
+                : os.startsWith("linux") ? LinuxContext.VALUE : null;
+        String source = os.startsWith("windows") ? "Java + Windows" : os.startsWith("linux") ? "system Linux" : "Java";
+        if (configuration == null) { configuration = JavaContext.VALUE; source = "Java"; }
+        return List.of(runtime, clock, configuration == null ? "TLS: domyślna konfiguracja JVM; brak konfiguracji zgodności Certum."
+                : "TLS: " + source + " + Certum Trusted Root CA · zaufane CA: " + configuration.roots());
     }
 
     private static final class LinuxContext {
-        private static final SSLContext VALUE = load();
+        private static final TrustConfiguration VALUE = load();
 
-        private static SSLContext load() {
+        private static TrustConfiguration load() {
             // Fedora (including the Modrinth Flatpak) and Debian/Ubuntu Java stores.
             for (String name : new String[]{
                     "/etc/pki/java/cacerts",
@@ -165,13 +207,26 @@ final class OfficialHttp {
     }
 
     private static final class WindowsContext {
-        private static final SSLContext VALUE = load();
+        private static final TrustConfiguration VALUE = load();
 
-        private static SSLContext load() {
+        private static TrustConfiguration load() {
             try {
                 return context(windowsTrustManager());
             } catch (IOException | SecurityException | GeneralSecurityException unavailable) {
                 return null;
+            }
+        }
+    }
+
+    private static final class JavaContext {
+        private static final TrustConfiguration VALUE = load();
+
+        private static TrustConfiguration load() {
+            try {
+                return context(trustManager(null));
+            } catch (IOException | SecurityException | GeneralSecurityException unavailable) {
+                try { return context(null); }
+                catch (IOException | SecurityException | GeneralSecurityException noCompatibilityStore) { return null; }
             }
         }
     }

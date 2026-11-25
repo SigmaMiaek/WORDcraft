@@ -133,6 +133,7 @@ tasks.register('verifyDistribution') {
             throw new GradleException('Distribution must target Minecraft 1.21.1 and Java 21.')
         }
         ['LICENSE', 'assets/wordcraft/icon.png', 'META-INF/THIRD_PARTY.md',
+         'META-INF/wordcraft-certificates/certum-trusted-root-ca.pem',
          'META-INF/wordcraft-licenses/LGPL-3.0.txt', 'pl/wordcraft/client/WordcraftClient.class',
          'pl/wordcraft/core/BulkDownloader.class', 'pl/wordcraft/download/OfficialHttp.class',
          'pl/wordcraft/media/MediaPlayer.class'].each { name ->

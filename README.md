@@ -77,6 +77,6 @@ Release notes are in [CHANGELOG.md](CHANGELOG.md).
 
 ## Download troubleshooting
 
-On Windows, WORDcraft combines the trusted CA certificates from Java and the current-user and local-machine Windows root stores. An empty or inaccessible Windows store does not replace Java's trusted roots. Explicit JVM trust-store settings retain priority; HTTPS verification remains enabled.
+On Windows, WORDcraft combines the trusted CA certificates from Java and the current-user and local-machine Windows root stores. An empty or inaccessible Windows store does not replace Java's trusted roots. The downloader also includes the public Certum Trusted Root CA certificate currently used by gov.pl for compatibility with older stores. Its SHA-256 fingerprint, validity, CA constraints and self-signature are checked before use. Source and fingerprint information are in `META-INF/wordcraft-certificates/README.txt`. Explicit JVM trust-store settings retain priority; HTTPS verification remains enabled.
 
-If automatic preparation fails, open **Ustawienia nauki → Raport bazy** in WORDcraft. The report includes the failed operation and the underlying exceptions, distinguishing HTTPS validation, DNS, timeouts and file-access failures. Minecraft's `logs/latest.log` also contains the complete exception under `Automatic preparation failed`.
+If automatic preparation fails, open **Ustawienia nauki → Raport bazy** in WORDcraft. The report includes the failed operation, Java/runtime version, active trust-store configuration and underlying exceptions, distinguishing HTTPS validation, DNS, timeouts and file-access failures. Custom trust-store passwords and paths are not displayed. Minecraft's `logs/latest.log` also contains the complete exception under `Automatic preparation failed`.
