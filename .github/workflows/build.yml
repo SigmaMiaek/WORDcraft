@@ -23,3 +23,17 @@ jobs:
         with:
           name: wordcraft-mc1.21.1
           path: build/libs/*-mc1.21.1*.jar
+
+  windows-https:
+    runs-on: windows-latest
+    env:
+      WORDCRAFT_ONLINE_TESTS: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Windows certificate stores and HTTPS regression tests
+        shell: bash
+        run: ./gradlew test --tests pl.wordcraft.download.OfficialHttpTest --tests pl.wordcraft.core.PreparationFailureTest --no-daemon

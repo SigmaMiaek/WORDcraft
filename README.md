@@ -74,3 +74,9 @@ The default keys are **K** for settings and **J** for a question. They can be ch
 WORDcraft code is provided under [MIT](LICENSE). JavaCV, JavaCPP and FFmpeg have separate licenses; the full notices and corresponding source links are included under [`src/main/resources/META-INF`](src/main/resources/META-INF). See [THIRD_PARTY.md](src/main/resources/META-INF/THIRD_PARTY.md).
 
 Release notes are in [CHANGELOG.md](CHANGELOG.md).
+
+## Download troubleshooting
+
+On Windows, WORDcraft combines the trusted CA certificates from Java and the current-user and local-machine Windows root stores. An empty or inaccessible Windows store does not replace Java's trusted roots. Explicit JVM trust-store settings retain priority; HTTPS verification remains enabled.
+
+If automatic preparation fails, open **Ustawienia nauki → Raport bazy** in WORDcraft. The report includes the failed operation and the underlying exceptions, distinguishing HTTPS validation, DNS, timeouts and file-access failures. Minecraft's `logs/latest.log` also contains the complete exception under `Automatic preparation failed`.

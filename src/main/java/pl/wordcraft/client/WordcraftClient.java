@@ -425,11 +425,12 @@ public final class WordcraftClient implements ClientModInitializer {
                     });
                 } catch (Exception ex) {
                     LOG.error("Automatic preparation failed", ex);
+                    List<String> failureReport = pl.wordcraft.core.PreparationFailure.report(ex, this.downloadStatus);
                     Minecraft.getInstance().execute(() -> {
                         this.importing = false;
                         this.downloadStatus = "";
-                        this.status = "Nie udało się przygotować bazy. Sprawdź internet i wybierz przygotowanie automatyczne.";
-                        this.audit = List.of(this.status, Objects.toString(ex.getMessage(), ex.getClass().getSimpleName()));
+                        this.status = failureReport.getFirst();
+                        this.audit = failureReport;
                     });
                 }
             });

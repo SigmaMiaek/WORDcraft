@@ -1,5 +1,13 @@
 # WORDcraft 1.6.0
 
+## Windows HTTPS compatibility fix
+
+- Combined Java's trusted CA certificates with the Windows current-user and local-machine root stores when downloading official learning materials.
+- Unavailable or empty Windows stores no longer discard Java's trusted CA certificates. Explicit JVM trust-store settings still take priority.
+- Kept HTTPS certificate-chain, expiry and hostname verification enabled.
+- Replaced the generic internet warning with specific HTTPS, DNS, timeout and disk-error messages. The question-bank report now includes the failed operation and the underlying exception chain.
+- Added local TLS regression tests and a Windows CI check against the official download endpoints.
+
 ## Minecraft 1.21.1 port
 
 - Added a Fabric build for Minecraft 1.21.1, compatible with Java 21.
